@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../style";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const TOKEN = "-GFxWLva8e4m7Dslg1SM5Oqebi6tJZQA";
+const TOKEN = "-";
 
 export default function CoolingFan() {
   const [isOn, setIsOn] = useState(false);
@@ -51,7 +51,7 @@ export default function CoolingFan() {
     const fetchBlynkStatus = async () => {
       try {
         const res = await fetch(
-          `https://blynk.cloud/external/api/get?token=${TOKEN}&v5&v8`
+          `-`
         );
         const data = await res.json();
         if (data.v8 !== undefined) setIsOn(data.v8 == 1);
@@ -283,3 +283,4 @@ export default function CoolingFan() {
     </SafeAreaView>
   );
 }
+
