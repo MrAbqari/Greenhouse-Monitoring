@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../style";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const TOKEN = "-GFxWLva8e4m7Dslg1SM5Oqebi6tJZQA";
+const TOKEN = "-";
 
 export default function WaterPump() {
   const [isOn, setIsOn] = useState(false);
@@ -240,3 +240,4 @@ export default function WaterPump() {
     </SafeAreaView>
   );
 }
+
