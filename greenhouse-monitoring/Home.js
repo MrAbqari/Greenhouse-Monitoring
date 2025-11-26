@@ -40,21 +40,21 @@ export default function Home() {
   // =============================
   // AMBIL DATA BLYNK
   // =============================
-  const TOKEN = "-GFxWLva8e4m7Dslg1SM5Oqebi6tJZQA";
+  const TOKEN = "-";
   const [blynkStatus, setBlynkStatus] = useState(false); // false = offline
 
 const fetchBlynkData = async () => {
   try {
     // 1. Cek apakah device Blynk online
     const statusRes = await fetch(
-      `https://blynk.cloud/external/api/isHardwareConnected?token=${TOKEN}`
+      `-`
     );
     const statusText = await statusRes.text();
     setBlynkStatus(statusText === "true");
 
     // 2. Ambil data seperti biasa (punya kamu)
     const res = await fetch(
-      `https://blynk.cloud/external/api/get?token=${TOKEN}&v0&v1&v2&v3&v4&v23&v18`
+      `-`
     );
     const data = await res.json();
 
