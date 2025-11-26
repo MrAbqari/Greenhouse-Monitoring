@@ -14,14 +14,14 @@ export default function Grafik() {
   const [CO2Data, setCO2Data] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const CHANNEL_ID = "3178617";
-  const READ_API = "DYAWELN5NTK35XW5";
+  const CHANNEL_ID = "-";
+  const READ_API = "-";
 
   const fetchData = async () => {
     try {
       setLoading(true);
 
-      const url = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API}&results=8`;
+      const url = `-`;
       const response = await fetch(url);
       const json = await response.json();
       const feeds = json.feeds || [];
@@ -186,3 +186,4 @@ export default function Grafik() {
     </SafeAreaView>
   );
 }
+
