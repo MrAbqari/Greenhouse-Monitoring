@@ -29,6 +29,12 @@ export default function CoolingFan() {
   const [savedMinCO2, setSavedMinCO2] = useState(null);
   const [savedMaxCO2, setSavedMaxCO2] = useState(null);
 
+  // Kelembapan udahra
+  const [minHumUdara, setMinHumUdara] = useState("");
+  const [maxHumUdara, setMaxHumUdara] = useState("");
+  const [savedMinHumUdara, setSavedMinHumUdara] = useState(null);
+  const [savedMaxHumUdara, setSavedMaxHumUdara] = useState(null);
+
   const disabledUI = !isOn; // <-- UI disable flag
 
   useEffect(() => {
@@ -38,11 +44,15 @@ export default function CoolingFan() {
         const sMax = await AsyncStorage.getItem("cf_max");
         const sMinCO2 = await AsyncStorage.getItem("cf_min_co2");
         const sMaxCO2 = await AsyncStorage.getItem("cf_max_co2");
+        const sMinHumUdara = await AsyncStorage.getItem("cf_min_humudara");
+        const sMaxHumUdara = await AsyncStorage.getItem("cf_max_humudara");
 
         if (sMin !== null) setSavedMin(sMin);
         if (sMax !== null) setSavedMax(sMax);
         if (sMinCO2 !== null) setSavedMinCO2(sMinCO2);
         if (sMaxCO2 !== null) setSavedMaxCO2(sMaxCO2);
+        if (sMinHumUdara !== null) setSavedMinHumUdara(sMinHumUdara);
+        if (sMaxHumUdara !== null) setSavedMaxHumUdara(sMaxHumUdara);
       } catch (err) {
         console.log("Load AsyncStorage error:", err);
       }
@@ -51,7 +61,7 @@ export default function CoolingFan() {
     const fetchBlynkStatus = async () => {
       try {
         const res = await fetch(
-          `-`
+          `https://blynk.cloud/external/api/get?token=${TOKEN}&v5&v8`
         );
         const data = await res.json();
         if (data.v8 !== undefined) setIsOn(data.v8 == 1);
@@ -96,11 +106,23 @@ export default function CoolingFan() {
       saveData("cf_max_co2", maxCO2);
       fetch(`https://blynk.cloud/external/api/update?token=${TOKEN}&V15=${maxCO2}`);
     }
+    if (minHumUdara !== "") {
+      setSavedMinHumUdara(minHumUdara);
+      saveData("cf_min_humudara", minHumUdara);
+      fetch(`https://blynk.cloud/external/api/update?token=${TOKEN}&V19=${minHumUdara}`);
+    }
+    if (maxHumUdara !== "") {
+      setSavedMaxHumUdara(maxHumUdara);
+      saveData("cf_max_humudara", maxHumUdara);
+      fetch(`https://blynk.cloud/external/api/update?token=${TOKEN}&V20=${maxHumUdara}`);
+    }
 
     setMinValue("");
     setMaxValue("");
     setMinCO2("");
     setMaxCO2("");
+    setMinHumUdara("");
+    setMaxHumUdara("");
   };
 
   const updateOnOff = (val) => {
@@ -268,6 +290,58 @@ export default function CoolingFan() {
                   )}
                 </View>
 
+                <Text style={styles.cfSubTitle}>Pengaturan Target Kelembapan Udara</Text>
+
+                <View style={styles.cfInputRow}>
+                  <Text style={styles.cfInputLabel}>Minimum</Text>
+                  {savedMinHumUdara !== null ? (
+                    <TouchableOpacity
+                      disabled={disabledUI}
+                      onPress={() => {
+                        setSavedMinHumUdara(null);
+                        saveData("cf_min_humudara", "");
+                      }}
+                      style={styles.cfReadonlyBox}
+                    >
+                      <Text style={styles.cfReadonlyText}>{savedMinHumUdara}</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TextInput
+                      editable={!disabledUI}
+                      style={styles.cfInput}
+                      placeholder="Masukkan nilai..."
+                      keyboardType="numeric"
+                      value={minHumUdara}
+                      onChangeText={setMinHumUdara}
+                    />
+                  )}
+                </View>
+
+                <View style={styles.cfInputRow}>
+                  <Text style={styles.cfInputLabel}>Maximum</Text>
+                  {savedMaxHumUdara !== null ? (
+                    <TouchableOpacity
+                      disabled={disabledUI}
+                      onPress={() => {
+                        setSavedMaxHumUdara(null);
+                        saveData("cf_max_humudara", "");
+                      }}
+                      style={styles.cfReadonlyBox}
+                    >
+                      <Text style={styles.cfReadonlyText}>{savedMaxHumUdara}</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TextInput
+                      editable={!disabledUI}
+                      style={styles.cfInput}
+                      placeholder="Masukkan nilai..."
+                      keyboardType="numeric"
+                      value={maxHumUdara}
+                      onChangeText={setMaxHumUdara}
+                    />
+                  )}
+                </View>
+
                 <TouchableOpacity
                   disabled={disabledUI}
                   style={styles.cfApplyButton}
@@ -283,4 +357,3 @@ export default function CoolingFan() {
     </SafeAreaView>
   );
 }
-
